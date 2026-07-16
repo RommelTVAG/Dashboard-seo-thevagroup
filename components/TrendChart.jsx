@@ -50,7 +50,7 @@ export default function TrendChart({ data }) {
           yAxisId="left"
           type="monotone"
           dataKey="Clicks"
-          stroke="#f97316"
+          stroke="#F5A623"
           strokeWidth={2}
           dot={false}
           activeDot={{ r: 4 }}
@@ -59,7 +59,7 @@ export default function TrendChart({ data }) {
           yAxisId="right"
           type="monotone"
           dataKey="Impressions"
-          stroke="#7c3aed"
+          stroke="#6B21A8"
           strokeWidth={2}
           dot={false}
           activeDot={{ r: 4 }}
