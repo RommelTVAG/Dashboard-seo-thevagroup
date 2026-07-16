@@ -1,8 +1,10 @@
 import path from 'path';
 import fs from 'fs';
+import dynamic from 'next/dynamic';
 import KpiCard from '../components/KpiCard';
-import TrendChart from '../components/TrendChart';
 import TopQueriesTable from '../components/TopQueriesTable';
+
+const TrendChart = dynamic(() => import('../components/TrendChart'), { ssr: false });
 
 export async function getStaticProps() {
   const dataPath = path.join(process.cwd(), 'data', 'seo_data.json');
@@ -28,9 +30,9 @@ export default function Dashboard({ seoData }) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-[#FEF5E4]">
       {/* Sidebar */}
-      <aside className="w-20 bg-orange-500 flex flex-col items-center py-6 gap-6 shadow-lg">
+      <aside className="w-20 bg-[#F5A623] flex flex-col items-center py-6 gap-6 shadow-lg">
         <div className="text-white font-bold text-xs text-center mb-4">
           <span className="block text-lg">📡</span>
           <span className="block text-[10px] mt-1">SEO</span>
@@ -40,7 +42,7 @@ export default function Dashboard({ seoData }) {
             key={item.label}
             title={item.label}
             className={`flex flex-col items-center gap-1 w-14 py-2 rounded-lg transition-colors ${
-              item.active ? 'bg-orange-700 text-white' : 'text-orange-100 hover:bg-orange-400'
+              item.active ? 'bg-[#D98007] text-white' : 'text-white/70 hover:bg-[#F5A623]/60'
             }`}
           >
             <span className="text-xl">{item.icon}</span>
@@ -48,7 +50,7 @@ export default function Dashboard({ seoData }) {
           </button>
         ))}
         <div className="mt-auto">
-          <button title="Refresh" className="flex flex-col items-center gap-1 text-orange-100 hover:text-white">
+          <button title="Refresh" className="flex flex-col items-center gap-1 text-white/70 hover:text-white">
             <span className="text-xl">🔄</span>
             <span className="text-[9px]">Refresh</span>
           </button>
@@ -63,7 +65,7 @@ export default function Dashboard({ seoData }) {
             <h1 className="text-2xl font-bold text-gray-800">SEO Dashboard</h1>
             <p className="text-sm text-gray-500">
               {meta.domain} · Last 28 days ·{' '}
-              <span className="text-orange-500">Updated {new Date(meta.generated_at).toLocaleDateString()}</span>
+              <span className="text-[#F5A623]">Updated {new Date(meta.generated_at).toLocaleDateString()}</span>
             </p>
           </div>
           <div className="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-600 shadow-sm">
@@ -73,48 +75,12 @@ export default function Dashboard({ seoData }) {
 
         {/* KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-          <KpiCard
-            label="Impressions"
-            value={gsc.summary.total_impressions.toLocaleString()}
-            icon="👁️"
-            color="orange"
-            sub="Search Console"
-          />
-          <KpiCard
-            label="Clicks"
-            value={gsc.summary.total_clicks.toLocaleString()}
-            icon="🖱️"
-            color="purple"
-            sub="Search Console"
-          />
-          <KpiCard
-            label="Avg CTR"
-            value={`${(gsc.summary.avg_ctr * 100).toFixed(1)}%`}
-            icon="🎯"
-            color="orange"
-            sub="Click-through rate"
-          />
-          <KpiCard
-            label="Avg Position"
-            value={gsc.summary.avg_position.toFixed(1)}
-            icon="🏆"
-            color="purple"
-            sub="SERP position"
-          />
-          <KpiCard
-            label="Sessions"
-            value={totalSessions.toLocaleString()}
-            icon="📊"
-            color="orange"
-            sub="Google Analytics"
-          />
-          <KpiCard
-            label="Bounce Rate"
-            value={`${(avgBounce * 100).toFixed(1)}%`}
-            icon="📉"
-            color="purple"
-            sub="Avg all pages"
-          />
+          <KpiCard label="Impressions" value={gsc.summary.total_impressions.toLocaleString()} icon="👁️" color="orange" sub="Search Console" />
+          <KpiCard label="Clicks" value={gsc.summary.total_clicks.toLocaleString()} icon="🔱️" color="purple" sub="Search Console" />
+          <KpiCard label="Avg CTR" value={`${(gsc.summary.avg_ctr * 100).toFixed(1)}%`} icon="🎯" color="orange" sub="Click-through rate" />
+          <KpiCard label="Avg Position" value={gsc.summary.avg_position.toFixed(1)} icon="🏆" color="purple" sub="SERP position" />
+          <KpiCard label="Sessions" value={totalSessions.toLocaleString()} icon="📊" color="orange" sub="Google Analytics" />
+          <KpiCard label="Bounce Rate" value={`${(avgBounce * 100).toFixed(1)}%`} icon="📉" color="purple" sub="Avg all pages" />
         </div>
 
         {/* SEMrush Row */}
@@ -128,7 +94,7 @@ export default function Dashboard({ seoData }) {
         {/* Charts Row */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-            <h2 className="text-base font-semibold text-gray-700 mb-4">Clicks & Impressions Trend</h2>
+            <h2 className="text-base font-semibold text-gray-700 mb-4">Clicks &amp; Impressions Trend</h2>
             <TrendChart data={gsc.daily_trend} />
           </div>
           <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
@@ -145,10 +111,10 @@ export default function Dashboard({ seoData }) {
                 </thead>
                 <tbody>
                   {semrush.top_organic_keywords.slice(0, 12).map((kw, i) => (
-                    <tr key={i} className="border-b border-gray-50 hover:bg-orange-50 transition-colors">
+                    <tr key={i} className="border-b border-gray-50 hover:bg-amber-50 transition-colors">
                       <td className="py-1.5 text-gray-700 truncate max-w-[160px]">{kw.keyword}</td>
                       <td className="py-1.5 text-right">
-                        <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${kw.position <= 3 ? 'bg-green-100 text-green-700' : kw.position <= 10 ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-500'}`}>
+                        <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${kw.position <= 3 ? 'bg-green-100 text-green-700' : kw.position <= 10 ? 'bg-amber-100 text-[#D98007]' : 'bg-gray-100 text-gray-500'}`}>
                           #{kw.position}
                         </span>
                       </td>
@@ -182,10 +148,10 @@ export default function Dashboard({ seoData }) {
                 </thead>
                 <tbody>
                   {ga4.top_pages_by_sessions.slice(0, 12).map((row, i) => (
-                    <tr key={i} className="border-b border-gray-50 hover:bg-purple-50 transition-colors">
+                    <tr key={i} className="border-b border-gray-50 hover:bg-violet-50 transition-colors">
                       <td className="py-1.5 text-gray-700 truncate max-w-[140px]" title={row.page}>{row.page}</td>
                       <td className="py-1.5">
-                        <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded-full whitespace-nowrap">{row.channel}</span>
+                        <span className="text-[10px] bg-amber-100 text-[#D98007] px-1.5 py-0.5 rounded-full whitespace-nowrap">{row.channel}</span>
                       </td>
                       <td className="py-1.5 text-right font-medium text-gray-800">{row.sessions}</td>
                       <td className="py-1.5 text-right text-gray-500">{(row.bounce_rate * 100).toFixed(0)}%</td>
@@ -200,7 +166,7 @@ export default function Dashboard({ seoData }) {
         {/* Footer */}
         <p className="text-center text-xs text-gray-400">
           Data sources: Google Search Console · SEMrush · Google Analytics 4 ·{' '}
-          <a href="https://github.com/RommelTVAG/Dashboard-seo-thevagroup" target="_blank" rel="noreferrer" className="text-orange-400 hover:underline">
+          <a href="https://github.com/RommelTVAG/Dashboard-seo-thevagroup" target="_blank" rel="noreferrer" className="text-[#F5A623] hover:underline">
             GitHub Database
           </a>
         </p>
