@@ -1,9 +1,9 @@
 export default function KpiCard({ label, value, icon, color, sub }) {
   const accent = color === 'orange'
-    ? 'border-l-orange-400 bg-orange-50'
-    : 'border-l-purple-500 bg-purple-50';
-  const iconBg = color === 'orange' ? 'bg-orange-100' : 'bg-purple-100';
-  const valueColor = color === 'orange' ? 'text-orange-600' : 'text-purple-700';
+    ? 'border-l-[#F5A623] bg-amber-50'
+    : 'border-l-[#6B21A8] bg-violet-50';
+  const iconBg = color === 'orange' ? 'bg-[#FEF0D0]' : 'bg-violet-100';
+  const valueColor = color === 'orange' ? 'text-[#D98007]' : 'text-[#6B21A8]';
 
   return (
     <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 border-l-4 ${accent} p-4 flex flex-col gap-1`}>
